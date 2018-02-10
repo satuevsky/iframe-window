@@ -1,6 +1,6 @@
 import Events from 'events';
 
-export default class IframeWindow extends Events{
+class IframeWindow extends Events{
     /**
      * Constructor. Class for working with window in iframe
      * @param {Object} params
