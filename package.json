@@ -1,0 +1,29 @@
+{
+  "name": "iframe-window",
+  "version": "1.0.0",
+  "description": "Lib for working with window from iframe app",
+  "main": "./lib/index.js",
+  "scripts": {
+    "prepublish": "babel src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satuevsky/iframe-window.git"
+  },
+  "author": "satuevsky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/satuevsky/iframe-window/issues"
+  },
+  "homepage": "https://github.com/satuevsky/iframe-window#readme",
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}
