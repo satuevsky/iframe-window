@@ -1,18 +1,22 @@
+//@flow
+
 import Events from 'events';
 
+type IframeWindowParams = {
+    width?: number,
+    height?: number,
+    minHeight?: number,
+    api?: WindowApi,
+}
+
+type WindowApi = {
+    resizeWindow: ()=>*,
+    scrollWindow: ()=>*,
+    onWindowScroll: ()=>*,
+}
+
 class IframeWindow extends Events{
-    /**
-     * Constructor. Class for working with window in iframe
-     * @param {Object} params
-     * @param {Number} params.width
-     * @param {Number} params.height
-     * @param {Number} params.minHeight
-     * @param {Object} params.api
-     * @param {Function} params.api.resizeWindow - method for resizing iframe size
-     * @param {Function} params.api.scrollWindow - method for scrolling a top window
-     * @param {Function} params.api.onWindowScroll - set callback for onScroll event on top window
-     */
-    constructor(params){
+    constructor(params: IframeWindowParams){
         super();
         params = params || {};
         this._width = params.width || 750;
@@ -34,19 +38,11 @@ class IframeWindow extends Events{
         });
     }
 
-    /**
-     * Iframe height.
-     * @return {number}
-     */
-    get height(){
+    get height(): number{
         return this._height;
     }
 
-    /**
-     * Set iframe height.
-     * @param {number} h
-     */
-    set height(h){
+    set height(h: number){
         if(h < this._minHeight) h = this._minHeight;
         if(h !== this._height){
             this._height = h;
@@ -55,38 +51,22 @@ class IframeWindow extends Events{
         }
     }
 
-    /**
-     * Iframe width.
-     * @return {number}
-     */
-    get width(){
+    get width(): number{
         return this._width;
     }
 
-    /**
-     * Setter for iframe width.
-     * @param {number} w
-     */
-    set width(w){
+    set width(w: number){
         if(w !== this._width){
             this._width = w;
             this.api.resizeWindow(this._width, this._height);
         }
     }
 
-    /**
-     * Scroll position.
-     * @return {number}
-     */
-    get scrollTop(){
+    get scrollTop(): number{
         return this._scrollTop;
     }
 
-    /**
-     * Set scroll for parent window through api.
-     * @param {number} s
-     */
-    set scrollTop(s){
+    set scrollTop(s: number){
         if(s !== this._scrollTop){
             this._scrollTop = s;
             this.api.scrollWindow(s);
@@ -94,20 +74,11 @@ class IframeWindow extends Events{
         }
     }
 
-    /**
-     * Add scroll listener.
-     * @param {function} listener
-     * @return {function} - returns function for remove added listener.
-     */
-    onScroll(listener){
+    onScroll(listener: ()=>void){
         this.on("scroll", listener);
         return () => this.removeListener("scroll", listener);
     }
 
-    /**
-     * Update iframe's visible height
-     * @private
-     */
     _updateVisibleHeight(){
         let height = this._height,
             scroll = this._scrollTop,
@@ -121,7 +92,7 @@ class IframeWindow extends Events{
             windowHeight = height - scroll;
         }
         this.visibleHeight = windowHeight;
-        this.emit("scroll");
+        this.emit("scroll", scroll, this.visibleHeight);
     }
 }
 
